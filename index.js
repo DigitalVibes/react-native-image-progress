@@ -183,6 +183,7 @@ export const createImageProgress = ImageComponent =>
             <IndicatorComponent
               progress={progress}
               indeterminate={!loading || !progress}
+              color={'#f3f3f3'}
               {...indicatorProps}
             />
           );
