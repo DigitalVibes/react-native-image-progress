@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
+import Lightbox from 'react-native-lightbox';
 
 const styles = StyleSheet.create({
   centered: {
@@ -142,6 +143,7 @@ export const createImageProgress = ImageComponent =>
         children,
         errorContainerStyle,
         indicator,
+        Modal,
         indicatorContainerStyle,
         indicatorProps,
         renderError,
@@ -190,21 +192,31 @@ export const createImageProgress = ImageComponent =>
         );
       }
 
-      return (
-        <View style={style} ref={this.handleRef}>
-          <ImageComponent
-            {...props}
-            key={source && source.uri}
-            onLoadStart={this.handleLoadStart}
-            onProgress={this.handleProgress}
-            onError={this.handleError}
-            onLoad={this.handleLoad}
-            source={source}
-            style={StyleSheet.absoluteFill}
+      const renderCarousel = (uri) => (
+          <Image
+            style={{ flex: 1 }}
+            resizeMode="contain"
+            source={{ uri: source.uri }}
           />
-          {indicatorElement}
-          {children}
-        </View>
+      );
+
+      return (
+        <Lightbox renderContent={(source) => renderCarousel(source)}>
+          <View style={style} ref={this.handleRef}>
+              <ImageComponent
+                {...props}
+                key={source && source.uri}
+                onLoadStart={this.handleLoadStart}
+                onProgress={this.handleProgress}
+                onError={this.handleError}
+                onLoad={this.handleLoad}
+                source={source}
+                style={[StyleSheet.absoluteFill, {borderRadius: 10} ]}
+              />
+            {indicatorElement}
+            {children}
+          </View>
+        </Lightbox>
       );
     }
   };
