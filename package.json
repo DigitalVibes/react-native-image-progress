@@ -38,7 +38,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "prop-types": "^15.5.10"
+    "prop-types": "^15.5.10",
+    "react-native-lightbox": "^0.7.0"
   },
   "devDependencies": {
     "babel": "^6.5.2",
