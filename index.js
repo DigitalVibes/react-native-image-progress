@@ -179,14 +179,24 @@ export const createImageProgress = ImageComponent =>
           const IndicatorComponent = typeof indicator === 'function'
             ? indicator
             : DefaultIndicator;
-          indicatorElement = (
-            <IndicatorComponent
-              progress={progress}
-              indeterminate={!loading || !progress}
-              color={'#f3f3f3'}
-              {...indicatorProps}
-            />
-          );
+          if (this.props.lightboxDisabled) {
+            indicatorElement = (
+              <IndicatorComponent
+                progress={progress}
+                indeterminate={!loading || !progress}
+                {...indicatorProps}
+              />
+            );
+          } else {
+            indicatorElement = (
+              <IndicatorComponent
+                progress={progress}
+                indeterminate={!loading || !progress}
+                color={'#f3f3f3'}
+                {...indicatorProps}
+              />
+            );
+          }
         }
         indicatorElement = (
           <View style={indicatorContainerStyle}>{indicatorElement}</View>
@@ -201,7 +211,7 @@ export const createImageProgress = ImageComponent =>
           />
       );
 
-      return (
+      const ImageWithLightBox = (
         <Lightbox renderContent={(source) => renderCarousel(source)}>
           <View style={style} ref={this.handleRef}>
               <ImageComponent
@@ -219,6 +229,30 @@ export const createImageProgress = ImageComponent =>
           </View>
         </Lightbox>
       );
+
+      if (this.props.lightboxDisabled) {
+        return (
+          <View style={style} ref={this.handleRef}>
+            <ImageComponent
+              {...props}
+              key={source && source.uri}
+              onLoadStart={this.handleLoadStart}
+              onProgress={this.handleProgress}
+              onError={this.handleError}
+              onLoad={this.handleLoad}
+              source={source}
+              style={StyleSheet.absoluteFill}
+            />
+            {indicatorElement}
+            {children}
+          </View>
+        );
+      } else {
+        return (
+          ImageWithLightBox
+        );
+      }
+      
     }
   };
 
